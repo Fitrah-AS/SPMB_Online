@@ -1,0 +1,6 @@
+{
+  "name": "SPMB Online",
+  "description": "Sistem Penerimaan Murid Baru (SPMB) Online Terpadu — pendaftaran sekolah lebih mudah, cepat, dan transparan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
