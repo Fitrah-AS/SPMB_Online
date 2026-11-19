@@ -18,7 +18,7 @@ import type { PengumumanItem, SchoolConfig, User } from '../types';
 import { BrandLogo } from './ui/Illustrations';
 import { formatTanggalIndonesia } from '../lib/api';
 
-const HERO_IMAGE_PATH = '/src/assets/images/hero_students_spmb_1795050778925.jpg';
+const HERO_IMAGE_PATH = '/src/assets/images/';
 
 interface LandingPageProps {
   config: SchoolConfig;
