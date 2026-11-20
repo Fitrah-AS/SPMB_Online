@@ -14,7 +14,7 @@ export type JenisDokumen =
   | 'kartu_keluarga'
   | 'akta_kelahiran'
   | 'ijazah_skl'
-  | 'pas_foto'
+  | 'pas_foto'  
   | 'dokumen_pendukung';
 
 export interface User {

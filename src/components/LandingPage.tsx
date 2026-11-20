@@ -76,7 +76,6 @@ export function LandingPage({
               { id: 'beranda' as const, href: '#beranda', label: 'Beranda' },
               { id: 'informasi' as const, href: '#informasi', label: 'Informasi' },
               { id: 'alur' as const, href: '#alur', label: 'Alur Pendaftaran' },
-              { id: 'faq' as const, href: '#faq', label: 'FAQ' }
             ].map((item) => {
               const isActive = activeNav === item.id;
               return (
@@ -134,7 +133,6 @@ export function LandingPage({
               { id: 'beranda' as const, href: '#beranda', label: 'Beranda' },
               { id: 'informasi' as const, href: '#informasi', label: 'Informasi' },
               { id: 'alur' as const, href: '#alur', label: 'Alur Pendaftaran' },
-              { id: 'faq' as const, href: '#faq', label: 'FAQ' }
             ].map((item) => (
               <a
                 key={item.href}
