@@ -17,6 +17,7 @@ import {
   UserPlus,
   LayoutDashboard
 } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import type { PengumumanItem, SchoolConfig, User } from '../types';
 import { BrandLogo } from './ui/Illustrations';
 import { MobileBottomNav } from './ui/MobileBottomNav';
@@ -140,7 +141,12 @@ export function LandingPage({
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
             {/* Hero Copy */}
-            <div className="lg:col-span-6 space-y-5 text-center lg:text-left">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-6 space-y-5 text-center lg:text-left"
+            >
               <h1 className="font-display text-3xl sm:text-4xl lg:text-[46px] font-extrabold tracking-tight text-[#0F172A] leading-[1.15] [text-wrap:balance]">
                 Selamat Datang di{' '}
                 <span className="block text-[#1D63ED]">SPMB Online</span>
@@ -167,10 +173,15 @@ export function LandingPage({
                   <span>Lihat Alur Pendaftaran</span>
                 </a>
               </div>
-            </div>
+            </motion.div>
 
             {/* Hero Image */}
-            <div className="lg:col-span-6">
+            <motion.div
+              initial={{ opacity: 0, y: 14, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.46, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-6"
+            >
               <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-100 to-white border-2 border-white shadow-xl aspect-[4/3] max-w-xl mx-auto">
                 {!heroImgError ? (
                   <img
@@ -188,13 +199,16 @@ export function LandingPage({
                   </div>
                 )}
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* 3 Clickable Summary Cards directly below Hero matching Top-Left Mockup */}
           <div className="mt-8 lg:mt-10 grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
-            <button
+            <motion.button
               type="button"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.36, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
               onClick={() => setInfoModal('jadwal')}
               className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 flex items-center gap-4 text-left hover:border-blue-300 hover:shadow-md transition-all cursor-pointer group"
             >
@@ -207,10 +221,13 @@ export function LandingPage({
                   {config.jadwal_pendaftaran}
                 </p>
               </div>
-            </button>
+            </motion.button>
 
-            <button
+            <motion.button
               type="button"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.36, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
               onClick={() => setInfoModal('pengumuman')}
               className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 flex items-center gap-4 text-left hover:border-blue-300 hover:shadow-md transition-all cursor-pointer group"
             >
@@ -223,10 +240,13 @@ export function LandingPage({
                   {config.tanggal_pengumuman}
                 </p>
               </div>
-            </button>
+            </motion.button>
 
-            <button
+            <motion.button
               type="button"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.36, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
               onClick={() => setInfoModal('persyaratan')}
               className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 flex items-center gap-4 text-left hover:border-blue-300 hover:shadow-md transition-all cursor-pointer group"
             >
@@ -239,7 +259,7 @@ export function LandingPage({
                   Kartu Keluarga, Ijazah
                 </p>
               </div>
-            </button>
+            </motion.button>
           </div>
         </div>
       </section>
@@ -247,18 +267,30 @@ export function LandingPage({
       {/* Informasi & Persyaratan Pendaftaran (Clean Progressive Disclosure) */}
       <section id="informasi" className="py-14 lg:py-18 bg-white border-y border-slate-200/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mb-9">
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
+            className="max-w-2xl mb-9"
+          >
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
               Informasi & Persyaratan
             </h2>
             <p className="text-slate-600 mt-1.5 text-sm sm:text-base">
               Siapkan dokumen utama di bawah ini sebelum memulai pendaftaran di {config.nama_sekolah}.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
             {/* Persyaratan Singkat */}
-            <div className="lg:col-span-7 bg-[#F8FBFF] rounded-2xl p-6 border border-blue-100 space-y-4">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-7 bg-[#F8FBFF] rounded-2xl p-6 border border-blue-100 space-y-4"
+            >
               <div className="flex items-center justify-between gap-4">
                 <h3 className="font-display text-lg font-bold text-slate-900">
                   Persyaratan Pendaftaran
@@ -298,10 +330,16 @@ export function LandingPage({
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
-            </div>
+            </motion.div>
 
             {/* Pengumuman Terbaru (Clickable cards for details) */}
-            <div className="lg:col-span-5 space-y-3.5">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.38, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-5 space-y-3.5"
+            >
               <div className="flex items-center justify-between">
                 <h3 className="font-display text-lg font-bold text-slate-900">Pengumuman Terbaru</h3>
                 <span className="text-xs text-slate-500">Klik untuk detail</span>
@@ -333,7 +371,7 @@ export function LandingPage({
                   </button>
                 ))
               )}
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -341,22 +379,32 @@ export function LandingPage({
       {/* Alur Pendaftaran (5 Langkah Sederhana) */}
       <section id="alur" className="py-14 lg:py-18 bg-[#F4F8FD]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-xl mx-auto mb-10">
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
+            className="text-center max-w-xl mx-auto mb-10"
+          >
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
               Alur Pendaftaran
             </h2>
             <p className="text-slate-600 mt-1.5 text-sm sm:text-base">
               Lima langkah sederhana pendaftaran murid baru secara online.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {config.alur.map((step) => {
+            {config.alur.map((step, idx) => {
               const isSelected = activeAlurStep === step.step;
               return (
-                <button
+                <motion.button
                   key={step.step}
                   type="button"
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ duration: 0.34, delay: idx * 0.05, ease: [0.16, 1, 0.3, 1] }}
                   onClick={() => setActiveAlurStep(step.step)}
                   className={`text-left rounded-2xl p-5 border transition-all flex flex-col cursor-pointer ${
                     isSelected
@@ -373,7 +421,7 @@ export function LandingPage({
                   </div>
                   <h3 className="font-display font-bold text-slate-900 text-base mb-1.5">{step.judul}</h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{step.deskripsi}</p>
-                </button>
+                </motion.button>
               );
             })}
           </div>
@@ -439,121 +487,149 @@ export function LandingPage({
       </footer>
 
       {/* Progressive Disclosure Modals for Hero Info Cards & Announcements */}
-      {infoModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 space-y-4 border border-slate-200">
-            <div className="flex items-center justify-between">
-              <h3 className="font-display text-lg font-bold text-slate-900">
-                {infoModal === 'jadwal' && 'Jadwal Pendaftaran SPMB'}
-                {infoModal === 'pengumuman' && 'Jadwal Pengumuman Seleksi'}
-                {infoModal === 'persyaratan' && 'Persyaratan Pendaftaran'}
-              </h3>
-              <button
-                type="button"
-                onClick={() => setInfoModal(null)}
-                className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 cursor-pointer"
-                aria-label="Tutup modal"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+      <AnimatePresence>
+        {infoModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 8 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 space-y-4 border border-slate-200"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="font-display text-lg font-bold text-slate-900">
+                  {infoModal === 'jadwal' && 'Jadwal Pendaftaran SPMB'}
+                  {infoModal === 'pengumuman' && 'Jadwal Pengumuman Seleksi'}
+                  {infoModal === 'persyaratan' && 'Persyaratan Pendaftaran'}
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setInfoModal(null)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 cursor-pointer"
+                  aria-label="Tutup modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-            {infoModal === 'jadwal' && (
-              <div className="space-y-3 text-sm text-slate-600">
-                <div className="p-4 rounded-xl bg-blue-50 border border-blue-100">
-                  <div className="text-xs text-slate-500">Periode Pendaftaran Online</div>
-                  <div className="font-display font-bold text-lg text-[#1D63ED] mt-0.5">
-                    {config.jadwal_pendaftaran}
+              {infoModal === 'jadwal' && (
+                <div className="space-y-3 text-sm text-slate-600">
+                  <div className="p-4 rounded-xl bg-blue-50 border border-blue-100">
+                    <div className="text-xs text-slate-500">Periode Pendaftaran Online</div>
+                    <div className="font-display font-bold text-lg text-[#1D63ED] mt-0.5">
+                      {config.jadwal_pendaftaran}
+                    </div>
                   </div>
+                  <p>
+                    Calon siswa dapat membuat akun, mengisi formulir 5 tahap, dan mengunggah dokumen persyaratan selama periode pendaftaran dibuka.
+                  </p>
+                  <p className="text-xs text-slate-500">Jam layanan bantuan panitia: {config.jam_layanan}</p>
                 </div>
-                <p>
-                  Calon siswa dapat membuat akun, mengisi formulir 5 tahap, dan mengunggah dokumen persyaratan selama periode pendaftaran dibuka.
-                </p>
-                <p className="text-xs text-slate-500">Jam layanan bantuan panitia: {config.jam_layanan}</p>
-              </div>
-            )}
+              )}
 
-            {infoModal === 'pengumuman' && (
-              <div className="space-y-3 text-sm text-slate-600">
-                <div className="p-4 rounded-xl bg-blue-50 border border-blue-100">
-                  <div className="text-xs text-slate-500">Tanggal Pengumuman Resmi</div>
-                  <div className="font-display font-bold text-lg text-[#1D63ED] mt-0.5">
-                    {config.tanggal_pengumuman}
+              {infoModal === 'pengumuman' && (
+                <div className="space-y-3 text-sm text-slate-600">
+                  <div className="p-4 rounded-xl bg-blue-50 border border-blue-100">
+                    <div className="text-xs text-slate-500">Tanggal Pengumuman Resmi</div>
+                    <div className="font-display font-bold text-lg text-[#1D63ED] mt-0.5">
+                      {config.tanggal_pengumuman}
+                    </div>
                   </div>
+                  <p>
+                    Hasil seleksi dapat dilihat langsung melalui menu Pengumuman di dashboard calon siswa. Surat Keterangan Hasil Seleksi tersedia dalam format PDF.
+                  </p>
                 </div>
-                <p>
-                  Hasil seleksi dapat dilihat langsung melalui menu Pengumuman di dashboard calon siswa. Surat Keterangan Hasil Seleksi tersedia dalam format PDF.
-                </p>
+              )}
+
+              {infoModal === 'persyaratan' && (
+                <ul className="space-y-2.5 text-sm text-slate-700 max-h-72 overflow-y-auto pr-1">
+                  {config.persyaratan.map((p, idx) => (
+                    <li key={idx} className="flex items-start gap-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-[#1D63ED] shrink-0 mt-0.5" />
+                      <span>{p}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <div className="pt-2 flex justify-end gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setInfoModal(null)}
+                  className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
+                >
+                  Tutup
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setInfoModal(null);
+                    handleDaftarClick();
+                  }}
+                  className="px-4 py-2 rounded-xl bg-[#1D63ED] text-white text-sm font-semibold hover:bg-blue-700 cursor-pointer"
+                >
+                  {currentUser ? 'Buka Dashboard' : 'Daftar Sekarang'}
+                </button>
               </div>
-            )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-            {infoModal === 'persyaratan' && (
-              <ul className="space-y-2.5 text-sm text-slate-700 max-h-72 overflow-y-auto pr-1">
-                {config.persyaratan.map((p, idx) => (
-                  <li key={idx} className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-[#1D63ED] shrink-0 mt-0.5" />
-                    <span>{p}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            <div className="pt-2 flex justify-end gap-2.5">
-              <button
-                type="button"
-                onClick={() => setInfoModal(null)}
-                className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
-              >
-                Tutup
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setInfoModal(null);
-                  handleDaftarClick();
-                }}
-                className="px-4 py-2 rounded-xl bg-[#1D63ED] text-white text-sm font-semibold hover:bg-blue-700 cursor-pointer"
-              >
-                {currentUser ? 'Buka Dashboard' : 'Daftar Sekarang'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {selectedAnn && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 space-y-4 border border-slate-200">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
-                  <span className="font-semibold text-[#1D63ED] capitalize">{selectedAnn.tipe}</span>
-                  <span>·</span>
-                  <span>{formatTanggalIndonesia(selectedAnn.tanggal_publikasi)}</span>
+      <AnimatePresence>
+        {selectedAnn && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 8 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 space-y-4 border border-slate-200"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
+                    <span className="font-semibold text-[#1D63ED] capitalize">{selectedAnn.tipe}</span>
+                    <span>·</span>
+                    <span>{formatTanggalIndonesia(selectedAnn.tanggal_publikasi)}</span>
+                  </div>
+                  <h3 className="font-display text-lg font-bold text-slate-900">{selectedAnn.judul}</h3>
                 </div>
-                <h3 className="font-display text-lg font-bold text-slate-900">{selectedAnn.judul}</h3>
+                <button
+                  type="button"
+                  onClick={() => setSelectedAnn(null)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => setSelectedAnn(null)}
-                className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">{selectedAnn.isi}</p>
-            <div className="flex justify-end">
-              <button
-                type="button"
-                onClick={() => setSelectedAnn(null)}
-                className="px-4 py-2 rounded-xl bg-[#1D63ED] text-white text-sm font-semibold hover:bg-blue-700 cursor-pointer"
-              >
-                Mengerti
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+              <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">{selectedAnn.isi}</p>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setSelectedAnn(null)}
+                  className="px-4 py-2 rounded-xl bg-[#1D63ED] text-white text-sm font-semibold hover:bg-blue-700 cursor-pointer"
+                >
+                  Mengerti
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <MobileBottomNav
         breakpoint="md"
         ariaLabel="Navigasi beranda mobile"

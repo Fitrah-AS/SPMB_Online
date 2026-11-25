@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import {
   LayoutDashboard,
   User as UserIcon,
@@ -594,6 +595,15 @@ export function SiswaDashboard({
 
         {/* Main Content Viewport */}
         <main className="flex-1 p-4 sm:p-6 lg:p-8 pb-28 lg:pb-10 max-w-5xl w-full mx-auto space-y-6">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeMenu}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="space-y-6"
+            >
           {/* 1. DASHBOARD HOME matching Middle-Left & Bottom-Center Mockup */}
           {activeMenu === 'dashboard' && (
             <div className="space-y-5">
@@ -1009,6 +1019,14 @@ export function SiswaDashboard({
                     )}
                   </div>
 
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={formStep}
+                      initial={{ opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                    >
                   {/* TAHAP 1: DATA DIRI */}
                   {formStep === 1 && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1391,6 +1409,8 @@ export function SiswaDashboard({
                       </label>
                     </div>
                   )}
+                    </motion.div>
+                  </AnimatePresence>
 
                   {/* Footer Action Buttons matching Top-Right Mockup */}
                   <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
@@ -1877,6 +1897,8 @@ export function SiswaDashboard({
               </div>
             </div>
           )}
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
 
@@ -1938,131 +1960,159 @@ export function SiswaDashboard({
       />
 
       {/* Status Explanation Modal */}
-      {statusHelpOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-4 border border-slate-200">
-            <div className="flex items-center justify-between">
-              <h3 className="font-display font-bold text-slate-900">Penjelasan Status Pendaftaran</h3>
-              <button
-                type="button"
-                onClick={() => setStatusHelpOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="space-y-2.5 text-xs text-slate-600">
-              <div><strong className="text-slate-900">Belum Mendaftar:</strong> Formulir belum dikirim ke panitia.</div>
-              <div><strong className="text-amber-700">Menunggu Verifikasi:</strong> Pendaftaran masuk, sedang dicek admin.</div>
-              <div><strong className="text-amber-700">Perlu Perbaikan:</strong> Ada data/berkas yang perlu diperbaiki.</div>
-              <div><strong className="text-[#1D63ED]">Sedang Seleksi:</strong> Berkas valid, menunggu penetapan kelulusan.</div>
-              <div><strong className="text-emerald-700">Diterima:</strong> Lolos seleksi penerimaan murid baru.</div>
-              <div><strong className="text-rose-700">Tidak Diterima:</strong> Belum lolos seleksi pada periode ini.</div>
-            </div>
-            <div className="flex justify-end">
-              <button
-                type="button"
-                onClick={() => setStatusHelpOpen(false)}
-                className="px-4 py-2 rounded-xl bg-[#1D63ED] text-white text-sm font-semibold hover:bg-blue-700 cursor-pointer"
-              >
-                Tutup
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {statusHelpOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 8 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-4 border border-slate-200"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="font-display font-bold text-slate-900">Penjelasan Status Pendaftaran</h3>
+                <button
+                  type="button"
+                  onClick={() => setStatusHelpOpen(false)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="space-y-2.5 text-xs text-slate-600">
+                <div><strong className="text-slate-900">Belum Mendaftar:</strong> Formulir belum dikirim ke panitia.</div>
+                <div><strong className="text-amber-700">Menunggu Verifikasi:</strong> Pendaftaran masuk, sedang dicek admin.</div>
+                <div><strong className="text-amber-700">Perlu Perbaikan:</strong> Ada data/berkas yang perlu diperbaiki.</div>
+                <div><strong className="text-[#1D63ED]">Sedang Seleksi:</strong> Berkas valid, menunggu penetapan kelulusan.</div>
+                <div><strong className="text-emerald-700">Diterima:</strong> Lolos seleksi penerimaan murid baru.</div>
+                <div><strong className="text-rose-700">Tidak Diterima:</strong> Belum lolos seleksi pada periode ini.</div>
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setStatusHelpOpen(false)}
+                  className="px-4 py-2 rounded-xl bg-[#1D63ED] text-white text-sm font-semibold hover:bg-blue-700 cursor-pointer"
+                >
+                  Tutup
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Preview Surat Hasil Seleksi Modal */}
-      {suratModalOpen && hasil_seleksi.dipublikasikan && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-5 border border-slate-200">
-            <div className="flex items-start justify-between gap-4 pb-4 border-b-2 border-[#1D63ED]">
-              <div>
-                <div className="text-xs font-semibold text-[#1D63ED]">SURAT KETERANGAN HASIL SELEKSI</div>
-                <h3 className="font-display font-bold text-lg text-slate-900">{config.nama_sekolah}</h3>
-                <p className="text-xs text-slate-500">Nomor: {hasil_seleksi.nomor_surat || '-'}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSuratModalOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-2 text-sm">
-              <div className="grid grid-cols-3 gap-2">
-                <span className="text-slate-500">No. Pendaftaran</span>
-                <span className="col-span-2 font-mono font-bold text-slate-900">{calon_siswa.nomor_pendaftaran || '-'}</span>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                <span className="text-slate-500">Tanggal Daftar</span>
-                <span className="col-span-2 font-semibold text-slate-900">{formatTanggalIndonesia(calon_siswa.tanggal_pendaftaran)}</span>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                <span className="text-slate-500">Nama Siswa</span>
-                <span className="col-span-2 font-semibold text-slate-900">{formulir.nama_lengkap}</span>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                <span className="text-slate-500">NISN</span>
-                <span className="col-span-2 font-mono font-semibold text-slate-900">{formulir.nisn}</span>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                <span className="text-slate-500">Asal Sekolah</span>
-                <span className="col-span-2 font-semibold text-slate-900">{formulir.nama_sekolah_asal}</span>
-              </div>
-            </div>
-
-            <div
-              className={`p-4 rounded-xl border text-center ${
-                hasil_seleksi.status_seleksi === 'Diterima'
-                  ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-                  : 'bg-rose-50 border-rose-200 text-rose-800'
-              }`}
+      <AnimatePresence>
+        {suratModalOpen && hasil_seleksi.dipublikasikan && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 8 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-5 border border-slate-200"
             >
-              <div className="text-xs font-medium">STATUS HASIL SELEKSI</div>
-              <div className="font-display text-2xl font-extrabold mt-0.5">
-                {hasil_seleksi.status_seleksi.toUpperCase()}
+              <div className="flex items-start justify-between gap-4 pb-4 border-b-2 border-[#1D63ED]">
+                <div>
+                  <div className="text-xs font-semibold text-[#1D63ED]">SURAT KETERANGAN HASIL SELEKSI</div>
+                  <h3 className="font-display font-bold text-lg text-slate-900">{config.nama_sekolah}</h3>
+                  <p className="text-xs text-slate-500">Nomor: {hasil_seleksi.nomor_surat || '-'}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSuratModalOpen(false)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
-            </div>
 
-            <div className="flex items-end justify-between gap-4 pt-3 border-t border-slate-100 text-xs text-slate-600">
-              <div>Diumumkan pada {config.tanggal_pengumuman}</div>
-              <div className="text-right">
-                <div>Kepala Sekolah,</div>
-                <div className="font-bold text-slate-900 mt-6">{config.nama_kepala_sekolah}</div>
-                <div>NIP. {config.nip_kepala_sekolah}</div>
+              <div className="space-y-2 text-sm">
+                <div className="grid grid-cols-3 gap-2">
+                  <span className="text-slate-500">No. Pendaftaran</span>
+                  <span className="col-span-2 font-mono font-bold text-slate-900">{calon_siswa.nomor_pendaftaran || '-'}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <span className="text-slate-500">Tanggal Daftar</span>
+                  <span className="col-span-2 font-semibold text-slate-900">{formatTanggalIndonesia(calon_siswa.tanggal_pendaftaran)}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <span className="text-slate-500">Nama Siswa</span>
+                  <span className="col-span-2 font-semibold text-slate-900">{formulir.nama_lengkap}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <span className="text-slate-500">NISN</span>
+                  <span className="col-span-2 font-mono font-semibold text-slate-900">{formulir.nisn}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <span className="text-slate-500">Asal Sekolah</span>
+                  <span className="col-span-2 font-semibold text-slate-900">{formulir.nama_sekolah_asal}</span>
+                </div>
               </div>
-            </div>
 
-            <div className="flex justify-end gap-2.5 pt-2">
-              <button
-                type="button"
-                onClick={() => setSuratModalOpen(false)}
-                className="px-4 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
+              <div
+                className={`p-4 rounded-xl border text-center ${
+                  hasil_seleksi.status_seleksi === 'Diterima'
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                    : 'bg-rose-50 border-rose-200 text-rose-800'
+                }`}
               >
-                Tutup
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  downloadHasilSeleksiPdf({
-                    config,
-                    siswa: calon_siswa,
-                    formulir,
-                    hasil: hasil_seleksi
-                  }).catch((e) => onNotify('error', e.message))
-                }
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1D63ED] text-white text-xs sm:text-sm font-semibold hover:bg-blue-700 cursor-pointer"
-              >
-                <Download className="w-4 h-4" />
-                <span>Download PDF</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+                <div className="text-xs font-medium">STATUS HASIL SELEKSI</div>
+                <div className="font-display text-2xl font-extrabold mt-0.5">
+                  {hasil_seleksi.status_seleksi.toUpperCase()}
+                </div>
+              </div>
+
+              <div className="flex items-end justify-between gap-4 pt-3 border-t border-slate-100 text-xs text-slate-600">
+                <div>Diumumkan pada {config.tanggal_pengumuman}</div>
+                <div className="text-right">
+                  <div>Kepala Sekolah,</div>
+                  <div className="font-bold text-slate-900 mt-6">{config.nama_kepala_sekolah}</div>
+                  <div>NIP. {config.nip_kepala_sekolah}</div>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2.5 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setSuratModalOpen(false)}
+                  className="px-4 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
+                >
+                  Tutup
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    downloadHasilSeleksiPdf({
+                      config,
+                      siswa: calon_siswa,
+                      formulir,
+                      hasil: hasil_seleksi
+                    }).catch((e) => onNotify('error', e.message))
+                  }
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1D63ED] text-white text-xs sm:text-sm font-semibold hover:bg-blue-700 cursor-pointer"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Download PDF</span>
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <DocumentPreviewModal doc={previewDoc} onClose={() => setPreviewDoc(null)} />
     </div>

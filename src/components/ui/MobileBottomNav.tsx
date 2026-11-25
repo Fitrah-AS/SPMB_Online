@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 
 export interface BottomNavItem {
   id: string;
@@ -81,7 +82,10 @@ export function MobileBottomNav({
   };
 
   return (
-    <nav
+    <motion.nav
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
       className={`${hideClass} fixed bottom-3 inset-x-3 z-40 no-print pointer-events-none pb-[env(safe-area-inset-bottom)]`}
       aria-label={ariaLabel}
     >
@@ -143,6 +147,6 @@ export function MobileBottomNav({
           {rightItems.map(renderSideItem)}
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 }

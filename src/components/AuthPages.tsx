@@ -12,6 +12,7 @@ import {
   X,
   HelpCircle
 } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import type { SchoolConfig, User } from '../types';
 import {
   BrandLogo,
@@ -176,7 +177,12 @@ export function AuthPages({
 
       {/* Center White Sweeping Card matching Bottom-Right Mockup */}
       <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-6 sm:px-6 lg:px-8">
-        <div className="max-w-4xl w-full bg-white/95 backdrop-blur-md rounded-3xl shadow-xl border border-white/80 p-6 sm:p-10 lg:p-12">
+        <motion.div
+          initial={{ opacity: 0, y: 16, scale: 0.985 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-4xl w-full bg-white/95 backdrop-blur-md rounded-3xl shadow-xl border border-white/80 p-6 sm:p-10 lg:p-12"
+        >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
             {/* Left Intro & Illustration */}
             <div className="lg:col-span-5 text-center lg:text-left space-y-4">
@@ -185,31 +191,55 @@ export function AuthPages({
                 <span className="font-display text-xl font-extrabold text-[#1D63ED]">SPMB</span>
               </div>
 
-              <div className="space-y-1.5">
-                <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900">
-                  {isRegister ? 'Daftar Akun Baru' : 'Masuk ke Akun Anda'}
-                </h1>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  {isRegister
-                    ? 'Buat akun calon siswa untuk mengisi formulir dan memantau seleksi.'
-                    : 'Untuk melanjutkan pendaftaran, silakan login terlebih dahulu.'}
-                </p>
-              </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isRegister ? 'intro-reg' : 'intro-login'}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  className="space-y-4"
+                >
+                  <div className="space-y-1.5">
+                    <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900">
+                      {isRegister ? 'Daftar Akun Baru' : 'Masuk ke Akun Anda'}
+                    </h1>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      {isRegister
+                        ? 'Buat akun calon siswa untuk mengisi formulir dan memantau seleksi.'
+                        : 'Untuk melanjutkan pendaftaran, silakan login terlebih dahulu.'}
+                    </p>
+                  </div>
 
-              <div className="pt-2">
-                {isRegister ? <FormChecklistIllustration /> : <LoginLaptopIllustration />}
-              </div>
+                  <div className="pt-2">
+                    {isRegister ? <FormChecklistIllustration /> : <LoginLaptopIllustration />}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
 
             {/* Right Clean Form */}
             <div className="lg:col-span-7 space-y-5">
               {errorMsg && (
-                <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm">
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex items-start gap-2.5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm"
+                >
                   <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
                   <span>{errorMsg}</span>
-                </div>
+                </motion.div>
               )}
 
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isRegister ? 'form-reg' : 'form-login'}
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                >
               {isRegister ? (
                 <form onSubmit={handleRegister} className="space-y-3.5">
                   <div>
@@ -427,82 +457,98 @@ export function AuthPages({
                   </div>
                 </form>
               )}
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
-        </div>
+        </motion.div>
       </main>
 
       {/* Lupa Password Modal */}
-      {forgotOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-4 border border-slate-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <HelpCircle className="w-5 h-5 text-[#1D63ED]" />
-                <h3 className="font-display font-bold text-slate-900">Bantuan Lupa Password</h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setForgotOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {forgotSent ? (
-              <div className="space-y-3 text-sm text-slate-600">
-                <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900">
-                  Permintaan pemulihan untuk <strong>{forgotEmail}</strong> telah dicatat. Silakan hubungi panitia SPMB ({config.telepon}) dengan menyertakan NISN/email terdaftar untuk verifikasi reset kata sandi.
+      <AnimatePresence>
+        {forgotOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 8 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-4 border border-slate-200"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <HelpCircle className="w-5 h-5 text-[#1D63ED]" />
+                  <h3 className="font-display font-bold text-slate-900">Bantuan Lupa Password</h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => setForgotOpen(false)}
-                  className="w-full py-2.5 rounded-xl bg-[#1D63ED] text-white text-sm font-semibold hover:bg-blue-700 cursor-pointer"
+                  className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 cursor-pointer"
                 >
-                  Kembali ke Login
+                  <X className="w-5 h-5" />
                 </button>
               </div>
-            ) : (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (!forgotEmail.trim()) return;
-                  setForgotSent(true);
-                }}
-                className="space-y-3"
-              >
-                <p className="text-sm text-slate-600">
-                  Masukkan alamat email yang Anda gunakan saat mendaftar akun SPMB.
-                </p>
-                <input
-                  type="email"
-                  required
-                  value={forgotEmail}
-                  onChange={(e) => setForgotEmail(e.target.value)}
-                  placeholder="nama@email.com"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-[#1D63ED]"
-                />
-                <div className="flex justify-end gap-2 pt-1">
+
+              {forgotSent ? (
+                <div className="space-y-3 text-sm text-slate-600">
+                  <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900">
+                    Permintaan pemulihan untuk <strong>{forgotEmail}</strong> telah dicatat. Silakan hubungi panitia SPMB ({config.telepon}) dengan menyertakan NISN/email terdaftar untuk verifikasi reset kata sandi.
+                  </div>
                   <button
                     type="button"
                     onClick={() => setForgotOpen(false)}
-                    className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
+                    className="w-full py-2.5 rounded-xl bg-[#1D63ED] text-white text-sm font-semibold hover:bg-blue-700 cursor-pointer"
                   >
-                    Batal
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 rounded-xl bg-[#1D63ED] text-white text-sm font-semibold hover:bg-blue-700 cursor-pointer"
-                  >
-                    Kirim Permintaan
+                    Kembali ke Login
                   </button>
                 </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
+              ) : (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!forgotEmail.trim()) return;
+                    setForgotSent(true);
+                  }}
+                  className="space-y-3"
+                >
+                  <p className="text-sm text-slate-600">
+                    Masukkan alamat email yang Anda gunakan saat mendaftar akun SPMB.
+                  </p>
+                  <input
+                    type="email"
+                    required
+                    value={forgotEmail}
+                    onChange={(e) => setForgotEmail(e.target.value)}
+                    placeholder="nama@email.com"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-[#1D63ED]"
+                  />
+                  <div className="flex justify-end gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setForgotOpen(false)}
+                      className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
+                    >
+                      Batal
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-4 py-2 rounded-xl bg-[#1D63ED] text-white text-sm font-semibold hover:bg-blue-700 cursor-pointer"
+                    >
+                      Kirim Permintaan
+                    </button>
+                  </div>
+                </form>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -4,6 +4,7 @@
  */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import type { PengumumanItem, SchoolConfig, ToastMessage, User } from './types';
 import { apiFetch, setStoredToken } from './lib/api';
 import { LandingPage } from './components/LandingPage';
@@ -85,77 +86,116 @@ export default function App() {
     );
   }
 
+  const activeViewKey =
+    view === 'dashboard' && user
+      ? `dashboard_${user.role}`
+      : view;
+
   return (
-    <>
-      {view === 'landing' && (
-        <LandingPage
-          config={config}
-          announcements={announcements}
-          currentUser={user}
-          onNavigateLogin={() => {
-            setAuthMode('login_siswa');
-            setView('auth');
-            window.scrollTo(0, 0);
-          }}
-          onNavigateRegister={() => {
-            setAuthMode('register_siswa');
-            setView('auth');
-            window.scrollTo(0, 0);
-          }}
-          onNavigateDashboard={() => {
-            setView('dashboard');
-            window.scrollTo(0, 0);
-          }}
-        />
-      )}
+    <MotionConfig reducedMotion="user">
+      <AnimatePresence mode="wait">
+        {view === 'landing' && (
+          <motion.div
+            key={activeViewKey}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <LandingPage
+              config={config}
+              announcements={announcements}
+              currentUser={user}
+              onNavigateLogin={() => {
+                setAuthMode('login_siswa');
+                setView('auth');
+                window.scrollTo(0, 0);
+              }}
+              onNavigateRegister={() => {
+                setAuthMode('register_siswa');
+                setView('auth');
+                window.scrollTo(0, 0);
+              }}
+              onNavigateDashboard={() => {
+                setView('dashboard');
+                window.scrollTo(0, 0);
+              }}
+            />
+          </motion.div>
+        )}
 
-      {view === 'auth' && (
-        <AuthPages
-          config={config}
-          initialMode={authMode}
-          onBackHome={() => {
-            setView('landing');
-            window.scrollTo(0, 0);
-          }}
-          onAuthSuccess={(loggedUser) => {
-            setUser(loggedUser);
-            setView('dashboard');
-            window.scrollTo(0, 0);
-          }}
-          onNotify={notify}
-        />
-      )}
+        {view === 'auth' && (
+          <motion.div
+            key={activeViewKey}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <AuthPages
+              config={config}
+              initialMode={authMode}
+              onBackHome={() => {
+                setView('landing');
+                window.scrollTo(0, 0);
+              }}
+              onAuthSuccess={(loggedUser) => {
+                setUser(loggedUser);
+                setView('dashboard');
+                window.scrollTo(0, 0);
+              }}
+              onNotify={notify}
+            />
+          </motion.div>
+        )}
 
-      {view === 'dashboard' && user?.role === 'calon_siswa' && (
-        <SiswaDashboard
-          user={user}
-          onUserUpdated={setUser}
-          onLogout={handleLogout}
-          onBackHome={() => {
-            loadPublic().catch(() => {});
-            setView('landing');
-            window.scrollTo(0, 0);
-          }}
-          onNotify={notify}
-        />
-      )}
+        {view === 'dashboard' && user?.role === 'calon_siswa' && (
+          <motion.div
+            key={activeViewKey}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <SiswaDashboard
+              user={user}
+              onUserUpdated={setUser}
+              onLogout={handleLogout}
+              onBackHome={() => {
+                loadPublic().catch(() => {});
+                setView('landing');
+                window.scrollTo(0, 0);
+              }}
+              onNotify={notify}
+            />
+          </motion.div>
+        )}
 
-      {view === 'dashboard' && user?.role === 'admin' && (
-        <AdminDashboard
-          user={user}
-          config={config}
-          onConfigUpdated={(nextCfg) => setConfig(nextCfg)}
-          onLogout={handleLogout}
-          onBackHome={() => {
-            loadPublic().catch(() => {});
-            setView('landing');
-            window.scrollTo(0, 0);
-          }}
-          onNotify={notify}
-        />
-      )}
+        {view === 'dashboard' && user?.role === 'admin' && (
+          <motion.div
+            key={activeViewKey}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <AdminDashboard
+              user={user}
+              config={config}
+              onConfigUpdated={(nextCfg) => setConfig(nextCfg)}
+              onLogout={handleLogout}
+              onBackHome={() => {
+                loadPublic().catch(() => {});
+                setView('landing');
+                window.scrollTo(0, 0);
+              }}
+              onNotify={notify}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />
-    </>
+    </MotionConfig>
   );
 }

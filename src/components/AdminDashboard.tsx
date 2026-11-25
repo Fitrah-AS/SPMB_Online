@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import {
   LayoutDashboard,
   Users,
@@ -632,7 +633,15 @@ export function AdminDashboard({
               <span className="text-sm font-medium">Memuat data admin...</span>
             </div>
           ) : (
-            <>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeMenu}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                className="space-y-6"
+              >
               {/* 1. DASHBOARD OVERVIEW matching Middle-Right Mockup & Section K */}
               {activeMenu === 'dashboard' && stats && (
                 <div className="space-y-6">
@@ -1534,15 +1543,29 @@ export function AdminDashboard({
                   </form>
                 </div>
               )}
-            </>
+              </motion.div>
+            </AnimatePresence>
           )}
         </main>
       </div>
 
       {/* DETAIL PENDAFTAR MODAL (TABBED FOR PROGRESSIVE DISCLOSURE) */}
-      {(detailData || detailLoading) && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden border border-slate-200">
+      <AnimatePresence>
+        {(detailData || detailLoading) && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 8 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden border border-slate-200"
+            >
             <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
               <div>
                 <h2 className="font-display text-lg font-bold text-slate-900">
@@ -1593,6 +1616,14 @@ export function AdminDashboard({
                 </div>
 
                 <div className="p-6 overflow-y-auto space-y-5">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={detailTab}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                    >
                   {detailTab === 'biodata' && (
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
@@ -1744,20 +1775,34 @@ export function AdminDashboard({
                       </div>
                     </div>
                   )}
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
               </>
             )}
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* SELEKSI MODAL */}
-      {seleksiTarget && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <form
-            onSubmit={handleSaveSeleksi}
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 space-y-4 border border-slate-200"
+      <AnimatePresence>
+        {seleksiTarget && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4"
           >
+            <motion.form
+              initial={{ opacity: 0, scale: 0.96, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 8 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              onSubmit={handleSaveSeleksi}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 space-y-4 border border-slate-200"
+            >
             <div className="flex items-center justify-between">
               <h3 className="font-display text-lg font-bold text-slate-900">
                 Tetapkan Hasil Seleksi — {seleksiTarget.nama_lengkap}
@@ -1831,9 +1876,10 @@ export function AdminDashboard({
                 Simpan Keputusan
               </button>
             </div>
-          </form>
-        </div>
-      )}
+            </motion.form>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* CONFIRMATION MODALS FOR IMPORTANT ACTIONS */}
       <ConfirmModal
