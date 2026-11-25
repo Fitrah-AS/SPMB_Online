@@ -16,8 +16,26 @@ import {
 
 initDatabase();
 
+function resolveServerPort(): number {
+  const portFlagIdx = process.argv.indexOf('--port');
+  if (portFlagIdx !== -1 && process.argv[portFlagIdx + 1]) {
+    const parsed = Number(process.argv[portFlagIdx + 1]);
+    if (Number.isFinite(parsed) && parsed > 0) return parsed;
+  }
+  const envPort = process.env.PORT ? Number(process.env.PORT) : NaN;
+  const nginxPort = process.env.NGINX_PORT ? Number(process.env.NGINX_PORT) : NaN;
+  if (Number.isFinite(envPort) && envPort > 0 && envPort !== nginxPort) {
+    return envPort;
+  }
+  const defaultAppPort = process.env.DEFAULT_APP_PORT ? Number(process.env.DEFAULT_APP_PORT) : NaN;
+  if (Number.isFinite(defaultAppPort) && defaultAppPort > 0) {
+    return defaultAppPort;
+  }
+  return 3000;
+}
+
 const app = express();
-const PORT = Number(process.env.PORT || 3000);
+const PORT = resolveServerPort();
 
 app.use(express.json({ limit: '4mb' }));
 app.use(cookieParser());
@@ -1277,8 +1295,13 @@ app.delete('/api/admin/config/logo', requireAuth, requireRole('admin'), (_req: A
 // ==========================================
 async function startServer() {
   if (process.env.NODE_ENV !== 'production') {
+    const disableHmr = process.env.DISABLE_HMR === 'true';
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        hmr: !disableHmr,
+        ...(disableHmr ? { ws: false as const } : {})
+      },
       appType: 'spa'
     });
     app.use(vite.middlewares);
@@ -1295,4 +1318,7 @@ async function startServer() {
   });
 }
 
-startServer();
+startServer().catch((err) => {
+  console.error('Failed to start SPMB Online server:', err);
+  process.exit(1);
+});

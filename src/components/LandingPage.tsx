@@ -5,17 +5,21 @@ import {
   FileText,
   User as UserIcon,
   CheckCircle2,
-  ChevronDown,
-  Menu,
   X,
   MapPin,
   Phone,
   Mail,
   ArrowRight,
-  Clock
+  Clock,
+  Home,
+  ListChecks,
+  LogIn,
+  UserPlus,
+  LayoutDashboard
 } from 'lucide-react';
 import type { PengumumanItem, SchoolConfig, User } from '../types';
 import { BrandLogo } from './ui/Illustrations';
+import { MobileBottomNav } from './ui/MobileBottomNav';
 import { formatTanggalIndonesia } from '../lib/api';
 
 const HERO_IMAGE_PATH = '/src/assets/images/';
@@ -39,10 +43,8 @@ export function LandingPage({
   onNavigateRegister,
   onNavigateDashboard
 }: LandingPageProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [heroImgError, setHeroImgError] = useState(false);
-  const [activeNav, setActiveNav] = useState<'beranda' | 'informasi' | 'alur' | 'faq'>('beranda');
+  const [activeNav, setActiveNav] = useState<'beranda' | 'informasi' | 'alur'>('beranda');
   const [infoModal, setInfoModal] = useState<InfoModalType>(null);
   const [selectedAnn, setSelectedAnn] = useState<PengumumanItem | null>(null);
   const [activeAlurStep, setActiveAlurStep] = useState<number>(1);
@@ -58,8 +60,8 @@ export function LandingPage({
   return (
     <div className="min-h-screen flex flex-col bg-[#F4F8FD] text-slate-900">
       {/* Top Bar Contract (3 zones) matching Top-Left Mockup */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-8">
+      <header className="md:sticky md:top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 md:h-16 flex items-center justify-between gap-8">
           <a
             href="#beranda"
             onClick={() => setActiveNav('beranda')}
@@ -75,7 +77,7 @@ export function LandingPage({
             {[
               { id: 'beranda' as const, href: '#beranda', label: 'Beranda' },
               { id: 'informasi' as const, href: '#informasi', label: 'Informasi' },
-              { id: 'alur' as const, href: '#alur', label: 'Alur Pendaftaran' },
+              { id: 'alur' as const, href: '#alur', label: 'Alur Pendaftaran' }
             ].map((item) => {
               const isActive = activeNav === item.id;
               return (
@@ -109,45 +111,14 @@ export function LandingPage({
               <button
                 type="button"
                 onClick={onNavigateLogin}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#1D63ED] text-white text-sm font-semibold hover:bg-blue-700 transition-colors shadow-sm whitespace-nowrap shrink-0 cursor-pointer"
+                className="inline-flex items-center gap-2 px-4 md:px-5 py-2 md:py-2.5 rounded-full bg-[#1D63ED] text-white text-xs md:text-sm font-semibold hover:bg-blue-700 transition-colors shadow-sm whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <UserIcon className="w-4 h-4" />
                 <span>Login</span>
               </button>
             )}
-
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen((prev) => !prev)}
-              className="md:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 cursor-pointer"
-              aria-label="Buka menu navigasi"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
           </div>
         </div>
-
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-1">
-            {[
-              { id: 'beranda' as const, href: '#beranda', label: 'Beranda' },
-              { id: 'informasi' as const, href: '#informasi', label: 'Informasi' },
-              { id: 'alur' as const, href: '#alur', label: 'Alur Pendaftaran' },
-            ].map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={() => {
-                  setActiveNav(item.id);
-                  setMobileMenuOpen(false);
-                }}
-                className="block px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-[#1D63ED]"
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-        )}
       </header>
 
       {/* Hero Section matching Top-Left & Bottom-Left Mockup */}
@@ -409,53 +380,8 @@ export function LandingPage({
         </div>
       </section>
 
-      {/* FAQ Section (Accordion, closed by default — opens on click) */}
-      <section id="faq" className="py-14 lg:py-18 bg-white border-t border-slate-200/70">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-9">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
-              Pertanyaan Umum (FAQ)
-            </h2>
-            <p className="text-sm text-slate-500 mt-1">
-              Klik pertanyaan untuk melihat jawaban.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            {config.faq.map((item, index) => {
-              const isOpen = openFaqIndex === index;
-              return (
-                <div
-                  key={index}
-                  className="rounded-2xl border border-slate-200 bg-[#F8FBFF] overflow-hidden"
-                >
-                  <button
-                    type="button"
-                    onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                    className="w-full px-5 py-4 text-left flex items-center justify-between gap-4 font-display font-semibold text-slate-900 hover:bg-blue-50/60 transition-colors cursor-pointer"
-                    aria-expanded={isOpen}
-                  >
-                    <span className="text-sm sm:text-base">{item.tanya}</span>
-                    <ChevronDown
-                      className={`w-5 h-5 text-[#1D63ED] shrink-0 transition-transform duration-200 ${
-                        isOpen ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-                  {isOpen && (
-                    <div className="px-5 pb-4 pt-2 text-sm text-slate-600 leading-relaxed border-t border-slate-200/70 bg-white">
-                      {item.jawab}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* Compact Footer */}
-      <footer className="bg-[#132238] text-slate-300 mt-auto">
+      <footer className="bg-[#132238] text-slate-300 mt-auto pb-20 md:pb-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             <div className="md:col-span-5 space-y-2.5">
@@ -628,6 +554,68 @@ export function LandingPage({
           </div>
         </div>
       )}
+      <MobileBottomNav
+        breakpoint="md"
+        ariaLabel="Navigasi beranda mobile"
+        leftItems={[
+          {
+            id: 'beranda',
+            label: 'Beranda',
+            href: '#beranda',
+            Icon: Home,
+            active: activeNav === 'beranda',
+            onClick: () => setActiveNav('beranda')
+          },
+          {
+            id: 'informasi',
+            label: 'Informasi',
+            href: '#informasi',
+            Icon: FileText,
+            active: activeNav === 'informasi',
+            onClick: () => setActiveNav('informasi')
+          }
+        ]}
+        centerItem={
+          currentUser
+            ? {
+                id: 'dashboard',
+                label: 'Dashboard',
+                Icon: LayoutDashboard,
+                active: true,
+                onClick: onNavigateDashboard
+              }
+            : {
+                id: 'daftar',
+                label: 'Daftar',
+                Icon: UserPlus,
+                active: true,
+                onClick: onNavigateRegister
+              }
+        }
+        rightItems={[
+          {
+            id: 'alur',
+            label: 'Alur',
+            href: '#alur',
+            Icon: ListChecks,
+            active: activeNav === 'alur',
+            onClick: () => setActiveNav('alur')
+          },
+          currentUser
+            ? {
+                id: 'akun',
+                label: 'Akun',
+                Icon: UserIcon,
+                onClick: onNavigateDashboard
+              }
+            : {
+                id: 'login',
+                label: 'Login',
+                Icon: LogIn,
+                onClick: onNavigateLogin
+              }
+        ]}
+      />
     </div>
   );
 }

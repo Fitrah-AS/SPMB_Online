@@ -51,6 +51,7 @@ import {
   NextStepClockIllustration,
   StatusBadge
 } from './ui/Illustrations';
+import { MobileBottomNav } from './ui/MobileBottomNav';
 import { apiFetch, formatTanggalIndonesia, formatUkuranFile } from '../lib/api';
 import {
   downloadBuktiPendaftaranPdf,
@@ -592,7 +593,7 @@ export function SiswaDashboard({
         </header>
 
         {/* Main Content Viewport */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-10 max-w-5xl w-full mx-auto space-y-6">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 pb-28 lg:pb-10 max-w-5xl w-full mx-auto space-y-6">
           {/* 1. DASHBOARD HOME matching Middle-Left & Bottom-Center Mockup */}
           {activeMenu === 'dashboard' && (
             <div className="space-y-5">
@@ -1879,33 +1880,50 @@ export function SiswaDashboard({
         </main>
       </div>
 
-      {/* Mobile Bottom Navigation Bar matching Bottom-Center Mockup */}
-      <nav
-        className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-slate-200/90 px-2 py-1.5 grid grid-cols-4 gap-1 no-print"
-        aria-label="Navigasi cepat siswa"
-      >
-        {[
-          { id: 'dashboard' as const, label: 'Beranda', Icon: Home },
-          { id: 'formulir' as const, label: 'Daftar', Icon: FileText },
-          { id: 'status' as const, label: 'Status', Icon: ClipboardCheck },
-          { id: 'pengumuman' as const, label: 'Pengumuman', Icon: Bell }
-        ].map(({ id, label, Icon }) => {
-          const active = activeMenu === id;
-          return (
-            <button
-              key={id}
-              type="button"
-              onClick={() => handleNav(id)}
-              className={`flex flex-col items-center justify-center py-1.5 rounded-xl text-[11px] font-semibold transition-colors cursor-pointer ${
-                active ? 'text-[#1D63ED] bg-blue-50/70' : 'text-slate-500'
-              }`}
-            >
-              <Icon className="w-4 h-4 mb-0.5" />
-              <span>{label}</span>
-            </button>
-          );
-        })}
-      </nav>
+      {/* Curved-Notch Mobile Bottom Navigation Bar */}
+      <MobileBottomNav
+        breakpoint="lg"
+        ariaLabel="Navigasi cepat siswa"
+        leftItems={[
+          {
+            id: 'dashboard',
+            label: 'Beranda',
+            Icon: Home,
+            active: activeMenu === 'dashboard',
+            onClick: () => handleNav('dashboard')
+          },
+          {
+            id: 'dokumen',
+            label: 'Dokumen',
+            Icon: Upload,
+            active: activeMenu === 'dokumen',
+            onClick: () => handleNav('dokumen')
+          }
+        ]}
+        centerItem={{
+          id: 'formulir',
+          label: 'Daftar',
+          Icon: FileText,
+          active: activeMenu === 'formulir',
+          onClick: () => handleNav('formulir')
+        }}
+        rightItems={[
+          {
+            id: 'status',
+            label: 'Status',
+            Icon: ClipboardCheck,
+            active: activeMenu === 'status',
+            onClick: () => handleNav('status')
+          },
+          {
+            id: 'pengumuman',
+            label: 'Info',
+            Icon: Bell,
+            active: activeMenu === 'pengumuman',
+            onClick: () => handleNav('pengumuman')
+          }
+        ]}
+      />
 
       {/* Confirm Submit Formulir Modal */}
       <ConfirmModal

@@ -45,6 +45,7 @@ import {
   DocumentPreviewModal,
   StatusBadge
 } from './ui/Illustrations';
+import { MobileBottomNav } from './ui/MobileBottomNav';
 import { apiFetch, formatTanggalIndonesia, formatUkuranFile } from '../lib/api';
 import { downloadLaporanPdf } from '../lib/pdfGenerator';
 
@@ -624,7 +625,7 @@ export function AdminDashboard({
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-6xl w-full mx-auto space-y-6 min-w-0">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 pb-28 lg:pb-10 max-w-6xl w-full mx-auto space-y-6 min-w-0">
           {loading ? (
             <div className="flex items-center justify-center py-20 text-slate-500 gap-3">
               <Loader2 className="w-6 h-6 animate-spin text-[#1D63ED]" />
@@ -1881,6 +1882,50 @@ export function AdminDashboard({
         variant="primary"
         onConfirm={handleUpdateStatus}
         onCancel={() => setStatusConfirmOpen(false)}
+      />
+
+      <MobileBottomNav
+        breakpoint="lg"
+        ariaLabel="Navigasi cepat admin"
+        leftItems={[
+          {
+            id: 'dashboard',
+            label: 'Beranda',
+            Icon: LayoutDashboard,
+            active: activeMenu === 'dashboard',
+            onClick: () => handleNav('dashboard')
+          },
+          {
+            id: 'pendaftar',
+            label: 'Pendaftar',
+            Icon: Users,
+            active: activeMenu === 'pendaftar',
+            onClick: () => handleNav('pendaftar')
+          }
+        ]}
+        centerItem={{
+          id: 'verifikasi',
+          label: 'Verifikasi',
+          Icon: FolderCheck,
+          active: activeMenu === 'verifikasi',
+          onClick: () => handleNav('verifikasi')
+        }}
+        rightItems={[
+          {
+            id: 'seleksi',
+            label: 'Seleksi',
+            Icon: Award,
+            active: activeMenu === 'seleksi',
+            onClick: () => handleNav('seleksi')
+          },
+          {
+            id: 'menu',
+            label: 'Lainnya',
+            Icon: Menu,
+            active: ['pengumuman', 'laporan', 'pengaturan'].includes(activeMenu),
+            onClick: () => setSidebarOpen(true)
+          }
+        ]}
       />
 
       <DocumentPreviewModal doc={previewDoc} onClose={() => setPreviewDoc(null)} />
